@@ -4,8 +4,9 @@ Change values here, not inside the modules.
 """
 
 # ---------------- Cameras ----------------
-# DirectShow order on this laptop: 0 = DroidCam (virtual), 1 = HP laptop cam, 2 = USB webcam (GY-891)
-TARGET_CAM_INDEX = 2        # external USB webcam on the turret
+# Turret webcam is picked by its Windows NAME, because camera numbers change when it's replugged.
+# Run tools/test_cameras.py to see the names. The operator cam uses Media Foundation (1 = HP laptop cam).
+TARGET_CAM_INDEX = "USB Camera"   # external USB webcam on the turret (name or DirectShow number)
 OPERATOR_CAM_INDEX = 1      # built-in laptop webcam
 TARGET_CAM_SIZE = (1280, 720)   # GY-891 only offers 1280x720 over DirectShow
 OPERATOR_CAM_SIZE = (640, 480)

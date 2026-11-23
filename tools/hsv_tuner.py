@@ -12,9 +12,10 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from vanguard import config  # noqa: E402
+from vanguard.camera import dshow_index  # noqa: E402
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--cam", default=config.TARGET_CAM_INDEX, help="index (0,1,2) or stream URL")
+ap.add_argument("--cam", default=config.TARGET_CAM_INDEX, help="camera name, index (0,1,2) or stream URL")
 ap.add_argument("--start", default="black", choices=list(config.COLOR_RANGES))
 args = ap.parse_args()
 
@@ -24,7 +25,11 @@ for name, val, mx in [("H lo", lo[0], 179), ("S lo", lo[1], 255), ("V lo", lo[2]
                       ("H hi", hi[0], 179), ("S hi", hi[1], 255), ("V hi", hi[2], 255)]:
     cv2.createTrackbar(name, "tuner", val, mx, lambda _: None)
 
-cap = cv2.VideoCapture(int(args.cam) if str(args.cam).isdigit() else args.cam)
+cam = str(args.cam)
+if "://" in cam:
+    cap = cv2.VideoCapture(cam)                                                    # stream URL
+else:                                                                              # same numbering/names as config.py
+    cap = cv2.VideoCapture(int(cam) if cam.isdigit() else dshow_index(cam), cv2.CAP_DSHOW)
 while True:
     ok, frame = cap.read()
     if not ok:

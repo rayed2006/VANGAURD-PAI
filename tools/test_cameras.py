@@ -1,9 +1,14 @@
-"""Step 5a: find which index is the laptop cam and which is the USB cam. Press any key for next, q to quit."""
+"""Show each camera with its index and Windows name (use the name in config.py). Any key = next, q = quit."""
 import sys
 
 import cv2
 
 backend = cv2.CAP_DSHOW if sys.platform.startswith("win") else cv2.CAP_ANY
+try:
+    from pygrabber.dshow_graph import FilterGraph
+    print("cameras (index: name):", dict(enumerate(FilterGraph().get_input_devices())))
+except ImportError:
+    pass
 for idx in range(5):
     cap = cv2.VideoCapture(idx, backend)
     ok, frame = cap.read() if cap.isOpened() else (False, None)

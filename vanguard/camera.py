@@ -6,11 +6,23 @@ import time
 import cv2
 
 
+def dshow_index(device_name):
+    """Windows camera name (e.g. "USB Camera") -> its current DirectShow index.
+    Numbers change when cameras are replugged; names don't."""
+    from pygrabber.dshow_graph import FilterGraph
+    devices = FilterGraph().get_input_devices()          # same order as cv2.CAP_DSHOW indexes
+    if device_name not in devices:
+        raise RuntimeError(f"camera '{device_name}' not found. Connected: {devices}")
+    return devices.index(device_name)
+
+
 class CameraStream:
     def __init__(self, index, size=(640, 480), name="cam", rotate_180=False, msmf=False):
-        """index: camera number (0, 1, 2...) OR a stream URL such as http://192.168.1.5:4747/video"""
+        """index: camera number (0, 1, 2...), camera name ("USB Camera") OR a stream URL"""
         if isinstance(index, str) and index.isdigit():
             index = int(index)
+        if isinstance(index, str) and "://" not in index:    # a camera name
+            index = dshow_index(index)
         if isinstance(index, str):
             self.cap = cv2.VideoCapture(index)                     # network stream (DroidCam / IP Webcam)
         else:
