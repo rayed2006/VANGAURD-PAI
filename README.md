@@ -48,6 +48,8 @@ Double-click **`Start VANGUARD.bat`**, or:
 ```
 .venv\Scripts\python main.py --color black --port COM5
 ```
+For the MVP (any person, pan only, keyboard trigger **F**), double-click **`Start MVP.bat`**
+(`.venv\Scripts\python main.py --mvp --port COM5`).
 Useful options: `--dry-run` (no Arduino), `--keyboard-trigger` (F key instead of gestures),
 `--no-tilt`, `--mvp` (any person, pan only, keyboard trigger).
 
